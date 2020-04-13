@@ -1,0 +1,11 @@
+[Unit]
+Description=vps-sentinel
+After=network.target
+
+[Service]
+Type=simple
+User=root
+ExecStart=/usr/bin/vps-sentinel
+
+[Install]
+WantedBy=multi-user.target
