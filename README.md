@@ -3,11 +3,28 @@
 ## The idea
 
 There are a lot of servers which are just hanging on the Internet.
-Peoples tries to host his own WordPress, mail server, etc..., but once he set up, never login again to the server.
+Peoples tries to host his own WordPress, mail server, etc..., but once he set up, never login again to the server, dont care about what happening on his server
 Playing with databases, configuring his CMS on the admin panel, but forget the underlying system.
 The only goal is take care of the service, the underlying system is not a priority.
 
+## The implementation
+
 Thats the point of the `vps-sentinel`: generate a report of the system on daily basis, and if you read it, you do more for the security than before.
+
+By default `vps-sentinel` runs every day at 4:00 AM with `systemd` as timer.
+
+#### Current features
+
+- Basic informations about the server
+- List open ports (as configured)
+- Show runnig processes, as a `top` like list (if enabled)
+
+#### TODO
+
+- Run ClamAV on the selected folders
+- Parse log files
+- Check `systemd` sercvices
+- Run auto update if `apt-daily*` is not enabled and reboot if required 
 
 ## Reuirements
 
@@ -20,8 +37,11 @@ golang >= 1.10
 ## Install
 
 ```
+git clone https://github.com/g0rbe/vps-sentinel
+cd vps-sentinel
 chmod +x install.sh
 sudo ./install.sh install
+sudo nano /etc/vps-sentinel.conf
 ```
 
 ## Remove
@@ -50,7 +70,13 @@ sudo ./install.sh install
 
 ## Configuration
 
-Configure `bin/vps-sentinel.conf` before the first install, or `/etc/vps-sentinel.conf` after install
+The command below open the config files with `nano`.
+To close without save: `ctrl + x`
+To save: `ctrl + s` and `ctrl + x`
+
+```
+sudo ./install.sh conf
+```
 
 ### The report
 
