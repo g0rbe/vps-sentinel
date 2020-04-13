@@ -13,6 +13,8 @@ Thats the point of the `vps-sentinel`: generate a report of the system on daily 
 
 By default `vps-sentinel` runs every day at 4:00 AM with `systemd` as timer.
 
+At this time, only debian based system are supported. 
+
 #### Current features
 
 - Basic informations about the server
