@@ -4,12 +4,18 @@
 
 There are a lot of servers which are just hanging on the Internet.
 Peoples tries to host his own WordPress, mail server, etc..., but once he set up, never login again to the server, dont care about what happening on his server
+
 Playing with databases, configuring his CMS on the admin panel, but forget the underlying system.
+
 The only goal is take care of the service, the underlying system is not a priority.
 
 ## The implementation
 
-Thats the point of the `vps-sentinel`: generate a report of the system on daily basis, and if you read it, you do more for the security than before.
+The operation is simple:
+
+- Collect informations about the server
+- Send a report to the administrator
+- If the admin read it, he do more for the server than before
 
 By default `vps-sentinel` runs every day at 4:00 AM with `systemd` as timer.
 
