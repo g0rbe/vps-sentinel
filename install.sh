@@ -48,6 +48,21 @@ build() {
     mv ./main ./bin
 }
 
+conf() {
+
+    if [ $EUID != 0 ]
+    then
+        echo "Run as root!"
+        exit 1
+    fi
+
+    nano /etc/vps-sentinel.conf
+
+    nano /etc/systemd/system/vps-sentinel.*
+
+    systemctl daemon-reload
+}
+
 case "$1" in
 "install")
     install
@@ -57,6 +72,9 @@ case "$1" in
     ;;
 "build")
     build
+    ;;
+"conf")
+    conf
     ;;
 *)
     echo "Invalid command: $1"
