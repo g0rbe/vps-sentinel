@@ -49,10 +49,12 @@ func Parse(path string) (Config, error) {
 		return conf, fmt.Errorf("failed to parse process->enable: invalid option %s", err)
 	}
 
+	// Parse process->sort
 	conf.ProcessSort = cfg.Section("process").Key("sort").String()
 
 	if conf.ProcessSort != "pid" && conf.ProcessSort != "name" &&
-		conf.ProcessSort != "cpu" && conf.ProcessSort != "memory" {
+		conf.ProcessSort != "user" && conf.ProcessSort != "cpu" &&
+		conf.ProcessSort != "memory" {
 
 		return conf, fmt.Errorf("failed to parse process->sort: invalid option: %s",
 			conf.ProcessSort)
