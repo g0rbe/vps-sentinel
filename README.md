@@ -37,6 +37,13 @@ At this time, only debian based system are supported.
     - List every port which is in listening state
     - Show the port number and it's process name
 - Show runnig processes, as a `top` like list (if enabled)
+    - Attributes:
+        - pid
+        - Executable name
+        - Name who runs the process
+        - CPU usage
+        - Memory usage
+    - Sort the list (as configured)
 
 #### TODO
 
