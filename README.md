@@ -3,6 +3,7 @@
 ## The idea
 
 There are a lot of servers which are just hanging on the Internet.
+
 Peoples tries to host his own WordPress, mail server, etc..., but once he set up, never login again to the server, dont care about what happening on his server
 
 Playing with databases, configuring his CMS on the admin panel, but forget the underlying system.
@@ -24,7 +25,17 @@ At this time, only debian based system are supported.
 #### Current features
 
 - Basic informations about the server
+    - Average system load
+    - Free / total memory
+    - free / total swap
+    - Uptime in day
 - List open ports (as configured)
+    - `tcp` = IPv4 TCP
+    - `tcp6` = IPv6 TCP
+    - `udp` = IPv4 UDP
+    - `udp6` = IPv6 UDP
+    - List every port which is in listening state
+    - Show the port number and it's process name
 - Show runnig processes, as a `top` like list (if enabled)
 
 #### TODO
@@ -79,7 +90,9 @@ sudo ./install.sh install
 ## Configuration
 
 The command below open the config files with `nano`.
+
 To close without save: `ctrl + x`
+
 To save: `ctrl + s` and `ctrl + x`
 
 ```
