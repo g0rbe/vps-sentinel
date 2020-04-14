@@ -10,11 +10,11 @@ import (
 
 // getMemoryUsageFromPid calculates the given PID's memory usage based on PSS.
 // Returns the memory usage in byte.
-func getMemoryUsageFromPid(pid int) (string, error) {
+func getMemoryUsageFromPid(pid string) (string, error) {
 
 	totalSize := 0
 
-	smapsFilePath := fmt.Sprintf("/proc/%d/smaps", pid)
+	smapsFilePath := fmt.Sprintf("/proc/%s/smaps", pid)
 
 	smapsFile, err := os.Open(smapsFilePath)
 

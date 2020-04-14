@@ -52,9 +52,9 @@ func getUpTime() (float64, error) {
 }
 
 // getTimeStatFromPid parse /proc/<pid>/stat and get the process's times
-func getTimeStatFromPid(pid int) (utime, stime, cutime, cstime, starttime float64, err error) {
+func getTimeStatFromPid(pid string) (utime, stime, cutime, cstime, starttime float64, err error) {
 
-	statFilepath := fmt.Sprintf("/proc/%d/stat", pid)
+	statFilepath := fmt.Sprintf("/proc/%s/stat", pid)
 	statFile, err := os.Open(statFilepath)
 
 	if err != nil {
@@ -111,7 +111,7 @@ func getTimeStatFromPid(pid int) (utime, stime, cutime, cstime, starttime float6
 }
 
 // getCPUUsageFromPid calcultes the CPU usage of the given process.
-func getCPUUsageFromPid(pid int) (string, error) {
+func getCPUUsageFromPid(pid string) (string, error) {
 
 	uptime, err := getUpTime()
 
