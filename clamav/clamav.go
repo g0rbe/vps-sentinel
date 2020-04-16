@@ -34,7 +34,7 @@ func RunClamAV(path string) (string, error) {
 		return "", fmt.Errorf("faile to update database with freshclam: %s", err)
 	}
 
-	cmd := exec.Command("/usr/bin/clamscan", "-i", "-r", path)
+	cmd := exec.Command("/usr/bin/clamscan", "-i", "-r", "--exclude-dir=\"^sys\"", path)
 
 	stdOut, err := cmd.StdoutPipe()
 	if err != nil {
