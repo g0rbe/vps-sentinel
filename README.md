@@ -58,6 +58,12 @@ To build:
 golang >= 1.10
 ```
 
+To run:
+
+```
+clamav
+```
+
 ## Install
 
 ```
@@ -76,7 +82,8 @@ sudo ./install.sh remove
 
 ## Update
 
-Install will not remove the existing configuration file!
+Update and replace the existing binary.
+Install will not overwrite the existing configuration file!
 
 ```
 git pull
