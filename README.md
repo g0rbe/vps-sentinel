@@ -64,7 +64,7 @@ golang >= 1.10
 git clone https://github.com/g0rbe/vps-sentinel
 cd vps-sentinel
 chmod +x install.sh
-sudo ./install conf
+sudo ./install.sh conf
 sudo ./install.sh install
 sudo nano /etc/vps-sentinel.conf
 ```
