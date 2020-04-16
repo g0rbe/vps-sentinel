@@ -2,32 +2,30 @@
 
 ## The idea
 
-There are a lot of servers which are just hanging on the Internet.
+There are lot of servers which are just hanging on the Internet.
 
-Peoples tries to host his own WordPress, mail server, etc..., but once he set up, never login again to the server, dont care about what happening on his server
+People try to host their own WordPress sites, mail servers, etc..., but once everything has set up, they never login again. They just simply don't care, what is happening on their server.
 
-Playing with databases, configuring his CMS on the admin panel, but forget the underlying system.
-
-The only goal is take care of the service, the underlying system is not a priority.
+Playing with databases, configuring their CMS on the admin panel, but forget the underlying system. The only goal is take care of the service, the underlying system is not a priority.
 
 ## The implementation
 
 The operation is simple:
 
-- Collect informations about the server
-- Send a report to the administrator
-- If the admin read it, he do more for the server than before
+- Collect informations about the server.
+- Send a report to the administrator.
+- If the admin reads it, he does more for the server than before.
 
 By default `vps-sentinel` runs every day at 4:00 AM with `systemd` as timer.
 
-At this time, only debian based system are supported. 
+At this time, only debian based systems are supported. 
 
 #### Current features
 
 - Basic informations about the server
     - Average system load
     - Free / total memory
-    - free / total swap
+    - Free / total swap
     - Uptime in day
 - List open ports (as configured)
     - `tcp` = IPv4 TCP
@@ -35,7 +33,7 @@ At this time, only debian based system are supported.
     - `udp` = IPv4 UDP
     - `udp6` = IPv6 UDP
     - List every port which is in listening state
-    - Show the port number and it's process name
+    - Show the port number and its process name
 - Show runnig processes, as a `top` like list (if enabled)
     - Attributes:
         - pid
@@ -54,7 +52,7 @@ At this time, only debian based system are supported.
 
 ## Reuirements
 
-On build:
+To build:
 
 ```
 golang >= 1.10
@@ -78,7 +76,7 @@ sudo ./install.sh remove
 
 ## Update
 
-Install wil not remove the existing configuration file!
+Install will not remove the existing configuration file!
 
 ```
 git pull
@@ -96,7 +94,7 @@ sudo ./install.sh install
 
 ## Configuration
 
-The command below open the config files with `nano`.
+The command below opens the config files with `nano`.
 
 To close without save: `ctrl + x`
 
@@ -106,9 +104,9 @@ To save: `ctrl + s` and `ctrl + x`
 sudo ./install.sh conf
 ```
 
-### The report
+# The report
 
-Exampe report:
+Example report:
 
 ```
 System informations:

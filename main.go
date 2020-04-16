@@ -88,7 +88,7 @@ func main() {
 	// Scan with ClamAV in the given paths
 	for _, path := range conf.ClamAVPath {
 
-		fmt.Printf("Running ClamAV on %s...\n", path)
+		fmt.Printf("Running ClamAV in %s...\n", path)
 
 		out, err := clamav.RunClamAV(path)
 

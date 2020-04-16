@@ -36,13 +36,11 @@ func RunClamAV(path string) (string, error) {
 
 	cmd := exec.Command("/usr/bin/clamscan", "-i", "-r", path)
 
-	// Pipe stdout
 	stdOut, err := cmd.StdoutPipe()
 	if err != nil {
 		return "", fmt.Errorf("failed to gte stdout pipe: %s", err)
 	}
 
-	// Pipe stderr
 	stdErr, err := cmd.StderrPipe()
 	if err != nil {
 		return "", fmt.Errorf("failed to get stderr pipe: %s", err)
