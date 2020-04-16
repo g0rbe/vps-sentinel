@@ -64,6 +64,7 @@ golang >= 1.10
 git clone https://github.com/g0rbe/vps-sentinel
 cd vps-sentinel
 chmod +x install.sh
+sudo ./install conf
 sudo ./install.sh install
 sudo nano /etc/vps-sentinel.conf
 ```
@@ -88,13 +89,16 @@ sudo ./install.sh install
 To build your own binary from source:
 
 ```
-./install.sh build
+sudo ./install.sh build
 sudo ./install.sh install
 ```
 
 ## Configuration
 
 The command below opens the config files with `nano`.
+
+If `vps-sentinel` is installed, then `conf` opens the installed files, else
+opens the repositorie's files (thtas will be moved to the right place at `install`)
 
 To close without save: `ctrl + x`
 
@@ -162,4 +166,17 @@ System informations:
 | 876     | wpa_supplicant               | 0.017   | 4            |
 | ...     | ...                          | ...     | ...          |
 +---------+------------------------------+---------+--------------+
-````
+
+Report of scanning: /tmp
+/tmp/virus: Eicar-Signature FOUND
+
+----------- SCAN SUMMARY -----------
+Known viruses: 6822011
+Engine version: 0.102.2
+Scanned directories: 1878
+Scanned files: 2636
+Infected files: 1
+Data scanned: 42.93 MB
+Data read: 39.02 MB (ratio 1.10:1)
+Time: 14.934 sec (0 m 14 s)
+```

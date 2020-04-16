@@ -38,7 +38,6 @@ remove() {
     rm /etc/vps-sentinel.conf
 
     systemctl disable --now vps-sentinel.timer
-
     rm /etc/systemd/system/vps-sentinel.*
     systemctl daemon-reload
 }
@@ -56,9 +55,26 @@ conf() {
         exit 1
     fi
 
-    nano /etc/vps-sentinel.conf
+    if [ -e /etc/vps-sentinel.conf ]
+    then
+        nano /etc/vps-sentinel.conf
+    else
+        nano ./bin/vps-sentinel.conf
+    fi
 
-    nano /etc/systemd/system/vps-sentinel.*
+    if [ -e /etc/systemd/system/vps-sentinel.service ]
+    then
+        nano /etc/systemd/system/vps-sentinel.service
+    else
+        nano ./bin/vps-sentinel.service
+    fi
+
+    if [ -e /etc/systemd/system/vps-sentinel.timer ]
+    then
+        nano /etc/systemd/system/vps-sentinel.timer
+    else
+        nano ./bin/vps-sentinel.timer
+    fi
 
     systemctl daemon-reload
 }
