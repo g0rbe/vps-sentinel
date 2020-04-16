@@ -46,7 +46,6 @@ At this time, only debian based systems are supported.
 
 #### TODO
 
-- Run ClamAV on the selected folders
 - Parse log files
 - Check `systemd` sercvices
 - Run auto update if `apt-daily*` is not enabled and reboot if required 
