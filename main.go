@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/g0rbe/vps-sentinel/clamav"
+
 	"github.com/g0rbe/vps-sentinel/netinfo"
 
 	"github.com/g0rbe/vps-sentinel/process"
@@ -81,6 +83,21 @@ func main() {
 		}
 
 		report += procList
+	}
+
+	// Scan with ClamAV in the given paths
+	for _, path := range conf.ClamAVPath {
+
+		fmt.Printf("Running ClamAV on %s...\n", path)
+
+		out, err := clamav.RunClamAV(path)
+
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Failed to run clamav on %s: %s\n", path, err)
+			os.Exit(1)
+		}
+
+		report += out
 	}
 
 	fmt.Printf("Sending report...\n")
