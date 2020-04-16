@@ -44,6 +44,8 @@ update() {
     git pull
 
     cp ./bin/main /usr/bin/vps-sentinel
+    chown root:root /usr/bin/vps-sentinel
+    chmod 0500 /usr/bin/vps-sentinel
 
 }
 
