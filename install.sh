@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 install() {
 
@@ -12,12 +13,9 @@ install() {
     chown root:root /usr/bin/vps-sentinel
     chmod 0500 /usr/bin/vps-sentinel
 
-    # Dont overwrite existing config
-    if [ ! -e /etc/vps-sentinel.conf ]
-    then
-        cp ./bin/vps-sentinel.conf /etc/vps-sentinel.conf
-        chmod 0600 /etc/vps-sentinel.conf
-    fi
+    
+    cp ./bin/vps-sentinel.conf /etc/vps-sentinel.conf
+    chmod 0600 /etc/vps-sentinel.conf
 
     cp ./bin/vps-sentinel.service /etc/systemd/system
     cp ./bin/vps-sentinel.timer /etc/systemd/system
@@ -40,6 +38,13 @@ remove() {
     systemctl disable --now vps-sentinel.timer
     rm /etc/systemd/system/vps-sentinel.*
     systemctl daemon-reload
+}
+
+update() {
+    git pull
+
+    cp ./bin/main /usr/bin/vps-sentinel
+
 }
 
 build() {
