@@ -91,6 +91,9 @@ case "$1" in
 "remove")
     remove
     ;;
+"update")
+    update
+    ;;
 "build")
     build
     ;;
