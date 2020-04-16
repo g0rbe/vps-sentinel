@@ -5,8 +5,7 @@ import (
 	"os"
 
 	"github.com/g0rbe/vps-sentinel/clamav"
-
-	"github.com/g0rbe/vps-sentinel/netinfo"
+	"github.com/g0rbe/vps-sentinel/ipinfo"
 
 	"github.com/g0rbe/vps-sentinel/process"
 
@@ -29,75 +28,85 @@ func main() {
 		os.Exit(1)
 	}
 
-	report := ""
+	var report string
 
-	fmt.Printf("Getting system informations...\n")
+	for _, feature := range conf.ReportStructure {
 
-	// Get system informations
-	sInfo, err := sysinfo.GetSysInfo()
+		switch feature {
+		case "system":
 
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Failed to get system informations: %s\n", err)
-		os.Exit(1)
-	}
+			report += "############## " +
+				"System informations" + " ##############\n\n"
 
-	report += sInfo
+			fmt.Printf("Getting system informations...\n")
 
-	fmt.Printf("Getting network informations...\n")
+			if sInfo, err := sysinfo.GetSysInfo(); err != nil {
+				fmt.Fprintf(os.Stderr, "Failed to get system informations: %s\n", err)
+				report += fmt.Sprintf("Failed to get system informations: %s\n", err)
+			} else {
+				report += sInfo
+			}
+		case "ip":
 
-	// Get network infomations
-	netInfo, err := netinfo.GetNetinfo()
+			report += "###### " +
+				"List of interfaces and its IP addresses" + " ######\n\n"
 
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Failed to get network informations: %s\n", err)
-		os.Exit(1)
-	}
+			fmt.Printf("Getting ip informations...\n")
 
-	report += netInfo
+			if netInfo, err := ipinfo.GetIPInfo(); err != nil {
+				fmt.Fprintf(os.Stderr, "Failed to get network informations: %s\n", err)
+				report += fmt.Sprintf("Failed to get network informations: %s\n", err)
+			} else {
+				report += netInfo
+			}
+		case "port":
 
-	// Iterate over the given protocols to get a report of listening ports
-	for _, protocol := range conf.PortProtocol {
+			// Iterate over the given protocols to get a report of listening ports
+			for _, protocol := range conf.PortProtocol {
 
-		fmt.Printf("getting open ports of %s...\n", protocol)
+				report += "##### " +
+					"Open ports (" + protocol + ")" + " #####\n\n"
 
-		ports, err := port.GetListeningPorts(protocol)
+				fmt.Printf("Getting open ports of %s...\n", protocol)
 
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "Failed to parse %s: %s\n", protocol, err)
-			os.Exit(1)
+				if ports, err := port.GetListeningPorts(protocol); err != nil {
+					fmt.Fprintf(os.Stderr, "Failed to parse %s: %s\n", protocol, err)
+					report += fmt.Sprintf("Failed to parse %s: %s\n", protocol, err)
+				} else {
+					report += ports
+				}
+			}
+		case "process":
+
+			report += "################################# " +
+				"List of processes" + " #################################\n\n"
+
+			fmt.Printf("Generating a list of processes...\n")
+
+			if procList, err := process.GetReport(conf.ProcessSort); err != nil {
+				fmt.Fprintf(os.Stderr, "Failed to list processes: %s\n", err)
+				report += fmt.Sprintf("Failed to list processes: %s\n", err)
+			} else {
+				report += procList
+			}
+		case "clamav":
+
+			// Scan with ClamAV in the given paths
+			for _, path := range conf.ClamAVPath {
+
+				report += "###################### " +
+					"ClamAV scan in " + path + " #######################\n\n"
+
+				fmt.Printf("Running ClamAV in %s...\n", path)
+
+				if out, err := clamav.RunClamAV(path); err != nil {
+					fmt.Fprintf(os.Stderr, "Failed to run clamav on %s: %s\n", path, err)
+					report += fmt.Sprintf("Failed to run clamav on %s: %s\n", path, err)
+				} else {
+					report += out
+				}
+			}
 		}
-
-		report += ports
-	}
-
-	// Get a report of existing processes on the system
-	if conf.ProcessEnable {
-
-		fmt.Printf("Generating a list of processes...\n")
-
-		procList, err := process.GetReport(conf.ProcessSort)
-
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "Failed to list processes: %s\n", err)
-			os.Exit(1)
-		}
-
-		report += procList
-	}
-
-	// Scan with ClamAV in the given paths
-	for _, path := range conf.ClamAVPath {
-
-		fmt.Printf("Running ClamAV in %s...\n", path)
-
-		out, err := clamav.RunClamAV(path)
-
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "Failed to run clamav on %s: %s\n", path, err)
-			os.Exit(1)
-		}
-
-		report += out
 	}
 
 	fmt.Printf("Sending report...\n")

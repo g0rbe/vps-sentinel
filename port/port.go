@@ -171,8 +171,6 @@ func GetListeningPorts(protocol string) (string, error) {
 
 	t := table.NewWriter()
 
-	t.SetTitle("Open ports (%s)", protocol)
-
 	t.AppendHeader(table.Row{"Port", "Process"})
 
 	for _, port := range ports {

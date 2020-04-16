@@ -160,8 +160,6 @@ func GetReport(sortField string) (string, error) {
 
 	t := table.NewWriter()
 
-	t.SetTitle("List of processes")
-
 	t.AppendHeader(table.Row{"Pid", "Name", "User", "CPU", "Memory (MiB)"})
 
 	for _, procInfo := range procInfos {

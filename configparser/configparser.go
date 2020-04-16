@@ -10,15 +10,15 @@ import (
 
 // Config is the tructure to store configuration settings
 type Config struct {
-	PortProtocol  []string
-	ProcessEnable bool
-	ProcessSort   string
-	ClamAVPath    []string
-	SMTPServer    string
-	SMTPPort      int
-	SMTPUser      string
-	SMTPPassword  string
-	SMTPRecipient string
+	ReportStructure []string
+	PortProtocol    []string
+	ProcessSort     string
+	ClamAVPath      []string
+	SMTPServer      string
+	SMTPPort        int
+	SMTPUser        string
+	SMTPPassword    string
+	SMTPRecipient   string
 }
 
 // sanitizeInput sanitize the input.
@@ -47,6 +47,22 @@ func Parse(path string) (Config, error) {
 		return conf, fmt.Errorf("failed to parse %s: %s", path, err)
 	}
 
+	// Parse reportStucture
+	conf.ReportStructure = cfg.Section("").Key("reportStructure").Strings(",")
+
+	if len(conf.ReportStructure) == 0 {
+		return conf, fmt.Errorf("failed to parse reportStructure: empty or not exist")
+	}
+
+	for _, report := range conf.ReportStructure {
+		if report != "system" && report != "ip" && report != "port" &&
+			report != "process" && report != "clamav" {
+
+			return conf, fmt.Errorf("failed to parse reportStructure: invalid option: %s",
+				report)
+		}
+	}
+
 	// Parse port->protocol
 	conf.PortProtocol = cfg.Section("port").Key("protocol").Strings(",")
 	if len(conf.PortProtocol) != 0 {
@@ -55,12 +71,6 @@ func Parse(path string) (Config, error) {
 				return conf, fmt.Errorf("failed to parse port->protocol: invalid option: %s", v)
 			}
 		}
-	}
-
-	// Parse process->enable
-	conf.ProcessEnable, err = cfg.Section("process").Key("enable").Bool()
-	if err != nil {
-		return conf, fmt.Errorf("failed to parse process->enable: invalid option %s", err)
 	}
 
 	// Parse process->sort

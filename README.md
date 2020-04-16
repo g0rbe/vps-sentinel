@@ -58,10 +58,16 @@ To build:
 golang >= 1.10
 ```
 
-To run:
+To run with ClamAV:
 
 ```
 clamav
+```
+
+To run without ClamAV:
+
+```
+
 ```
 
 ## Install
@@ -84,6 +90,7 @@ sudo ./install.sh remove
 
 Update and replace the existing binary.
 Install will not overwrite the existing configuration file!
+**Please watch out for new configurations in `vps-sentinel.conf`!**
 
 ```
 git pull

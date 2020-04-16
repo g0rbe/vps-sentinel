@@ -198,7 +198,7 @@ func GetSysInfo() (string, error) {
 		return "", fmt.Errorf("failed to get uptime: %s", err)
 	}
 
-	report := "System informations:\n"
+	var report string
 
 	report += fmt.Sprintf("- Average system loads (1/5/15): %.2f, %.2f %.2f\n",
 		loads[0], loads[1], loads[2])
