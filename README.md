@@ -66,7 +66,6 @@ cd vps-sentinel
 chmod +x install.sh
 sudo ./install.sh conf
 sudo ./install.sh install
-sudo nano /etc/vps-sentinel.conf
 ```
 
 ## Remove
@@ -98,7 +97,7 @@ sudo ./install.sh install
 The command below opens the config files with `nano`.
 
 If `vps-sentinel` is installed, then `conf` opens the installed files, else
-opens the repositorie's files (thtas will be moved to the right place at `install`)
+opens the repositorie's files (thats will be moved to the right place at `install`)
 
 To close without save: `ctrl + x`
 
