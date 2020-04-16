@@ -42,6 +42,7 @@ At this time, only debian based systems are supported.
         - CPU usage
         - Memory usage
     - Sort the list (as configured)
+- Run ClamAV in the selected folders
 
 #### TODO
 
