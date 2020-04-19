@@ -35,7 +35,7 @@ func RunClamAV(path string) (string, error) {
 	}
 
 	cmd := exec.Command("/usr/bin/clamscan", "-i", "-r",
-		"--exclude-dir=\"^sys\"", "--exclude-dir=\"^proc\"", "--exclude-dir=\"^/dev\"", path)
+		"--exclude-dir=\"^/sys\"", "--exclude-dir=\"^/proc\"", "--exclude-dir=\"^/dev\"", path)
 
 	stdOut, err := cmd.StdoutPipe()
 	if err != nil {
