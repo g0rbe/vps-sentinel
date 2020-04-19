@@ -3,6 +3,7 @@ package configparser
 
 import (
 	"fmt"
+	"os"
 	"strings"
 
 	"gopkg.in/ini.v1"
@@ -14,6 +15,8 @@ type Config struct {
 	PortProtocol    []string
 	ProcessSort     string
 	ClamAVPath      []string
+	SSHLogPath      string
+	SSHParseFailed  bool
 	SMTPServer      string
 	SMTPPort        int
 	SMTPUser        string
@@ -48,15 +51,15 @@ func Parse(path string) (Config, error) {
 	}
 
 	// Parse reportStucture
-	conf.ReportStructure = cfg.Section("").Key("reportStructure").Strings(",")
+	conf.ReportStructure = cfg.Section("report").Key("structure").Strings(",")
 
 	if len(conf.ReportStructure) == 0 {
-		return conf, fmt.Errorf("failed to parse reportStructure: empty or not exist")
+		return conf, fmt.Errorf("failed to parse report->structure: empty or not exist")
 	}
 
 	for _, report := range conf.ReportStructure {
 		if report != "system" && report != "ip" && report != "port" &&
-			report != "process" && report != "clamav" {
+			report != "process" && report != "clamav" && report != "log.ssh" {
 
 			return conf, fmt.Errorf("failed to parse reportStructure: invalid option: %s",
 				report)
@@ -90,10 +93,28 @@ func Parse(path string) (Config, error) {
 			return conf, fmt.Errorf("failed to parse clamav->path: not an absolute path: %s",
 				path)
 		}
-
+		// Path goes to a system() call, so sanitize is necessary
 		if err := sanitizeInput(path); err != nil {
 			return conf, fmt.Errorf("failed to parse clamav->path: %s", err)
 		}
+	}
+
+	// Parse log.ssh->path
+	conf.SSHLogPath = cfg.Section("log.ssh").Key("path").String()
+
+	if conf.SSHLogPath == "" {
+		return conf, fmt.Errorf("failed to parse log.ssh->path: empty or not exist")
+	}
+
+	if _, err := os.Stat(conf.SSHLogPath); os.IsNotExist(err) {
+		return conf, fmt.Errorf("failed to parse log.ssh->path: file not exist: %s",
+			conf.SSHLogPath)
+	}
+
+	// Parse log.ssh->failed
+	conf.SSHParseFailed, err = cfg.Section("log.ssh").Key("failed").Bool()
+	if err != nil {
+		return conf, fmt.Errorf("failed to parse log.ssh->failed: %s", err)
 	}
 
 	// Parse smtp->server

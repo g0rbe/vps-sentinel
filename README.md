@@ -43,10 +43,22 @@ At this time, only debian based systems are supported.
         - Memory usage
     - Sort the list (as configured)
 - Run ClamAV in the selected folders
+- Parse log file:
+    - SSH logins: accepted / failed (optional)
+        - Accepted list shows:
+            - Time of login
+            - Logged in user
+            - Remote IP
+            - Authentication type (eg. password, publickey)
+        - Failed list shows:
+            - Remote IP
+            - Number of failed login from that IP
+            - The list is sorted by Count, from higher to lower 
 
 #### TODO
 
 - Parse log files
+    - Nginx
 - Check `systemd` sercvices
 - Run auto update if `apt-daily*` is not enabled and reboot if required 
 

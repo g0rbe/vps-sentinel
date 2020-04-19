@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/g0rbe/vps-sentinel/logparser"
+
 	"github.com/g0rbe/vps-sentinel/clamav"
 	"github.com/g0rbe/vps-sentinel/ipinfo"
 
@@ -35,8 +37,7 @@ func main() {
 		switch feature {
 		case "system":
 
-			report += "############## " +
-				"System informations" + " ##############\n\n"
+			report += "############## " + "System informations" + " ##############\n\n"
 
 			fmt.Printf("Getting system informations...\n")
 
@@ -48,8 +49,7 @@ func main() {
 			}
 		case "ip":
 
-			report += "###### " +
-				"List of interfaces and its IP addresses" + " ######\n\n"
+			report += "###### " + "List of interfaces and its IP addresses" + " ######\n\n"
 
 			fmt.Printf("Getting ip informations...\n")
 
@@ -64,8 +64,7 @@ func main() {
 			// Iterate over the given protocols to get a report of listening ports
 			for _, protocol := range conf.PortProtocol {
 
-				report += "##### " +
-					"Open ports (" + protocol + ")" + " #####\n\n"
+				report += "##### " + "Open ports (" + protocol + ")" + " #####\n\n"
 
 				fmt.Printf("Getting open ports of %s...\n", protocol)
 
@@ -78,8 +77,8 @@ func main() {
 			}
 		case "process":
 
-			report += "################################# " +
-				"List of processes" + " #################################\n\n"
+			report += "################################## " +
+				"List of processes" + " ##################################\n\n"
 
 			fmt.Printf("Generating a list of processes...\n")
 
@@ -102,6 +101,33 @@ func main() {
 				if out, err := clamav.RunClamAV(path); err != nil {
 					fmt.Fprintf(os.Stderr, "Failed to run clamav on %s: %s\n", path, err)
 					report += fmt.Sprintf("Failed to run clamav on %s: %s\n", path, err)
+				} else {
+					report += out
+				}
+			}
+		case "log.ssh":
+
+			report += "#################### " +
+				"Accepted SSH logins" + " #####################\n\n"
+
+			fmt.Printf("Finding accepted SSH logins...\n")
+
+			if out, err := logparser.GetAcceptedLogins(conf.SSHLogPath); err != nil {
+				fmt.Fprintf(os.Stderr, "Failed to get accepted SSH logins: %s", err)
+				report += fmt.Sprintf("Failed to get accepted SSH logins: %s", err)
+			} else {
+				report += out
+			}
+
+			if conf.SSHParseFailed {
+				report += "######## " +
+					"Failed SSH logins" + " ########\n\n"
+
+				fmt.Printf("Finding failed SSH logins...\n")
+
+				if out, err := logparser.GetFailedLogins(conf.SSHLogPath); err != nil {
+					fmt.Fprintf(os.Stderr, "Failed to get failed SSH logins: %s", err)
+					report += fmt.Sprintf("Failed to get failed SSH logins: %s", err)
 				} else {
 					report += out
 				}
