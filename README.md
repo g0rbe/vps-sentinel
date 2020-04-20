@@ -27,16 +27,16 @@ At this time, only debian based systems are supported.
     - Free / total memory
     - Free / total swap
     - Uptime in day
-- List open ports (as configured)
+- List open ports
     - `tcp` = IPv4 TCP
     - `tcp6` = IPv6 TCP
     - `udp` = IPv4 UDP
     - `udp6` = IPv6 UDP
     - List every port which is in listening state
     - Show the port number and its process name
-- Show runnig processes, as a `top` like list (if enabled)
+- Show runnig processes, as a `top` like list
     - Attributes:
-        - pid
+        - Pid
         - Executable name
         - Name who runs the process
         - CPU usage
@@ -44,7 +44,7 @@ At this time, only debian based systems are supported.
     - Sort the list (as configured)
 - Run ClamAV in the selected folders
 - Parse log file:
-    - SSH logins: accepted / failed (optional)
+    - SSH logins: accepted / failed
         - Accepted list shows:
             - Time of login
             - Logged in user
@@ -53,12 +53,19 @@ At this time, only debian based systems are supported.
         - Failed list shows:
             - Remote IP
             - Number of failed login from that IP
-            - The list is sorted by Count, from higher to lower 
+            - The list is sorted by Count, from higher to lower
+    - Nginx:
+        - Parse `access.log`:
+            - Client error (4XX) and server error (5XX):
+                - Date
+                - IP
+                - Status code
+                - User agent
+                - Request    
 
 #### TODO
 
 - Parse log files
-    - Nginx
 - Check `systemd` sercvices
 - Run auto update if `apt-daily*` is not enabled and reboot if required 
 
