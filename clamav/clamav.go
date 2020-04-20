@@ -41,8 +41,6 @@ func RunClamAV(path string) (string, error) {
 
 	cmd := exec.Command("sh", "-c", command)
 
-	fmt.Printf("%v\n", cmd.Args)
-
 	stdOut, err := cmd.StdoutPipe()
 	if err != nil {
 		return "", fmt.Errorf("failed to gte stdout pipe: %s", err)
