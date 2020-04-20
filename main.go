@@ -107,8 +107,8 @@ func main() {
 			}
 		case "log.ssh":
 
-			report += "#################### " +
-				"Accepted SSH logins" + " #####################\n\n"
+			report += "##################### " +
+				"Accepted SSH logins" + " ######################\n\n"
 
 			fmt.Printf("Finding accepted SSH logins...\n")
 
@@ -125,12 +125,38 @@ func main() {
 
 				fmt.Printf("Finding failed SSH logins...\n")
 
-				if out, err := logparser.GetFailedLogins(conf.SSHLogPath); err != nil {
+				if out, err := logparser.GetFailedLogins(conf.SSHLogPath, conf.SSHMultiple); err != nil {
 					fmt.Fprintf(os.Stderr, "Failed to get failed SSH logins: %s", err)
 					report += fmt.Sprintf("Failed to get failed SSH logins: %s", err)
 				} else {
 					report += out
 				}
+			}
+
+		case "log.nginx":
+
+			report += "##################### " +
+				"Nginx client errors " + " ######################\n\n"
+
+			fmt.Printf("Finding client errors in Nginx's log...\n")
+
+			if out, err := logparser.GetNginxClientErrors(conf.NginxLogPath); err != nil {
+				fmt.Fprintf(os.Stderr, "Failed to get Nginx client errors: %s\n", err)
+				report += fmt.Sprintf("Failed to get Nginx client errors: %s\n", err)
+			} else {
+				report += out
+			}
+
+			report += "##################### " +
+				"Nginx server errors " + " ######################\n\n"
+
+			fmt.Printf("Finding server errors in Nginx's log...\n")
+
+			if out, err := logparser.GetNginxServerErrors(conf.NginxLogPath); err != nil {
+				fmt.Fprintf(os.Stderr, "Failed to get Nginx server errors: %s\n", err)
+				report += fmt.Sprintf("Failed to get Nginx server errors: %s\n", err)
+			} else {
+				report += out
 			}
 		}
 	}

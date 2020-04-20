@@ -143,7 +143,7 @@ func GetAcceptedLogins(path string) (string, error) {
 }
 
 // GetFailedLogins generates a report of the failed logins
-func GetFailedLogins(path string) (string, error) {
+func GetFailedLogins(path string, multiple bool) (string, error) {
 
 	logins, err := parseFailedLogins(path)
 
@@ -156,6 +156,11 @@ func GetFailedLogins(path string) (string, error) {
 	t.AppendHeader(table.Row{"IP", "Count"})
 
 	for _, login := range logins {
+
+		if multiple && login.Count == 1 {
+			continue
+		}
+
 		t.AppendRow(table.Row{login.IP, login.Count})
 	}
 

@@ -17,6 +17,8 @@ type Config struct {
 	ClamAVPath      []string
 	SSHLogPath      string
 	SSHParseFailed  bool
+	SSHMultiple     bool
+	NginxLogPath    string
 	SMTPServer      string
 	SMTPPort        int
 	SMTPUser        string
@@ -50,19 +52,20 @@ func Parse(path string) (Config, error) {
 		return conf, fmt.Errorf("failed to parse %s: %s", path, err)
 	}
 
-	// Parse reportStucture
+	// Parse report->structure
 	conf.ReportStructure = cfg.Section("report").Key("structure").Strings(",")
 
 	if len(conf.ReportStructure) == 0 {
 		return conf, fmt.Errorf("failed to parse report->structure: empty or not exist")
 	}
 
-	for _, report := range conf.ReportStructure {
-		if report != "system" && report != "ip" && report != "port" &&
-			report != "process" && report != "clamav" && report != "log.ssh" {
+	for _, feature := range conf.ReportStructure {
+		if feature != "system" && feature != "ip" && feature != "port" &&
+			feature != "process" && feature != "clamav" && feature != "log.ssh" &&
+			feature != "log.nginx" {
 
 			return conf, fmt.Errorf("failed to parse reportStructure: invalid option: %s",
-				report)
+				feature)
 		}
 	}
 
@@ -115,6 +118,23 @@ func Parse(path string) (Config, error) {
 	conf.SSHParseFailed, err = cfg.Section("log.ssh").Key("failed").Bool()
 	if err != nil {
 		return conf, fmt.Errorf("failed to parse log.ssh->failed: %s", err)
+	}
+
+	// Parse log.ssh->multiple
+	conf.SSHMultiple, err = cfg.Section("log.ssh").Key("multiple").Bool()
+	if err != nil {
+		return conf, fmt.Errorf("failed to parse log.ssh->multiple: %s", err)
+	}
+
+	// parse log.nginx->path
+	conf.NginxLogPath = cfg.Section("log.nginx").Key("path").String()
+	if conf.NginxLogPath == "" {
+		return conf, fmt.Errorf("failed to parse log.nginx->path: empty or not exist")
+	}
+
+	if _, err := os.Stat(conf.NginxLogPath); os.IsNotExist(err) {
+		return conf, fmt.Errorf("failed to parse log.nginx->path: file not exist: %s",
+			conf.SSHLogPath)
 	}
 
 	// Parse smtp->server
