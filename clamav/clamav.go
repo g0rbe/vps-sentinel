@@ -34,8 +34,14 @@ func RunClamAV(path string) (string, error) {
 		return "", fmt.Errorf("faile to update database with freshclam: %s", err)
 	}
 
-	cmd := exec.Command("/usr/bin/clamscan", "-i", "-r",
-		"--exclude-dir=\"^/sys\"", "--exclude-dir=\"^/proc\"", "--exclude-dir=\"^/dev\"", path)
+	// Needed if someone wants to scan the whole system ("/")
+	excludeDirs := "--exclude-dir=\"^/sys\" --exclude-dir=\"^/proc\" --exclude-dir=\"^/dev\""
+
+	command := "/usr/bin/clamscan -i -r " + excludeDirs + " " + path
+
+	cmd := exec.Command("sh", "-c", command)
+
+	fmt.Printf("%v\n", cmd.Args)
 
 	stdOut, err := cmd.StdoutPipe()
 	if err != nil {
